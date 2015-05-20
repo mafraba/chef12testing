@@ -11,6 +11,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     server.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
     server.vm.hostname = "aserver"
     server.vm.network "private_network", ip: "192.168.33.11"
+    server.vm.provision :shell, path: "server-bootstrap.sh"
+    server.vm.provider :virtualbox do |vb|
+        vb.customize ["modifyvm", :id, "--memory", "4096"]
+        vb.customize ["modifyvm", :id, "--cpus", "2"]
+    end
   end
 
   config.vm.define "aworks" do |ws|
