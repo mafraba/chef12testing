@@ -25,11 +25,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ws.vm.network "private_network", ip: "192.168.33.12"
   end
 
-  config.vm.define "anode" do |node|
-    node.vm.box = "trusty64"
-    node.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
-    node.vm.hostname = "anode"
-    node.vm.network "private_network", ip: "192.168.33.13"
-  end
+#  config.vm.define "anode" do |node|
+#    node.vm.box = "trusty64"
+#    node.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
+#    node.vm.hostname = "anode"
+#    node.vm.network "private_network", ip: "192.168.33.13"
+#  end
 
 end
