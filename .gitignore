@@ -1,3 +1,4 @@
 pivotal.pem
 code/
 pkgs/
+.vagrant/
