@@ -16,7 +16,8 @@ echo `hostname -f`
 
 # Get and install Chef server
 if [ ! -f /vagrant/pkgs/chef-server-core_12.0.8-1_amd64.deb ]; then
-    wget -O /vagrant/pkgs/chef-server-core_12.0.8-1_amd64.deb https://web-dl.packagecloud.io/chef/stable/packages/ubuntu/trusty/chef-server-core_12.0.8-1_amd64.deb
+  mkdir -p /vagrant/pkgs
+  wget -O /vagrant/pkgs/chef-server-core_12.0.8-1_amd64.deb https://web-dl.packagecloud.io/chef/stable/packages/ubuntu/trusty/chef-server-core_12.0.8-1_amd64.deb
 fi
 cp /vagrant/pkgs/chef-server-core_12.0.8-1_amd64.deb .
 sudo dpkg -i chef-server-core_*.deb

@@ -11,7 +11,8 @@ sudo echo "192.168.33.13 192.168.33.13 anode" >> /etc/hosts
 
 # Get and install Chef DK
 if [ ! -f /vagrant/pkgs/chefdk_0.6.0-1_amd64.deb ]; then
-    wget -O /vagrant/pkgs/chefdk_0.6.0-1_amd64.deb https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.6.0-1_amd64.deb
+  mkdir -p /vagrant/pkgs
+  wget -O /vagrant/pkgs/chefdk_0.6.0-1_amd64.deb https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.6.0-1_amd64.deb
 fi
 cp /vagrant/pkgs/chefdk_*.deb .
 sudo dpkg -i chefdk_*.deb
