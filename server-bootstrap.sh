@@ -5,16 +5,23 @@ apt-get upgrade -y
 sudo locale-gen es_ES.UTF-8
 
 # Ensure that the Server is Accessible by Hostname
-sudo echo "127.0.1.1 192.168.33.11 aserver" > /etc/hosts
-sudo echo "127.0.0.1 localhost" >> /etc/hosts
-sudo echo "192.168.33.11 192.168.33.11 aserver" >> /etc/hosts
-sudo echo "192.168.33.12 192.168.33.12 aworks" >> /etc/hosts
-sudo echo "192.168.33.13 192.168.33.13 anode" >> /etc/hosts
+# sudo echo "127.0.1.1 192.168.33.11 aserver" > /etc/hosts
+sudo echo "127.0.0.1 localhost" > /etc/hosts
+sudo echo "192.168.33.11 aserver" >> /etc/hosts
+sudo echo "192.168.33.12 aworks" >> /etc/hosts
+sudo echo "192.168.33.13 anode" >> /etc/hosts
+
+echo "Hostname:"
+echo `hostname -f`
 
 # Get and install Chef server
-wget https://web-dl.packagecloud.io/chef/stable/packages/ubuntu/trusty/chef-server-core_12.0.8-1_amd64.deb
+if [ ! -f /vagrant/pkgs/chef-server-core_12.0.8-1_amd64.deb ]; then
+    wget -O /vagrant/pkgs/chef-server-core_12.0.8-1_amd64.deb https://web-dl.packagecloud.io/chef/stable/packages/ubuntu/trusty/chef-server-core_12.0.8-1_amd64.deb
+fi
+cp /vagrant/pkgs/chef-server-core_12.0.8-1_amd64.deb .
 sudo dpkg -i chef-server-core_*.deb
 sudo chef-server-ctl reconfigure
+rm chef-server-core_*.deb
 
 # Create an Admin User and Organization
 sudo chef-server-ctl user-create admin admin admin admin@example.com examplepass -f admin.pem

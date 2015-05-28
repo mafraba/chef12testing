@@ -23,6 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ws.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
     ws.vm.hostname = "aworks"
     ws.vm.network "private_network", ip: "192.168.33.12"
+    ws.vm.provision :shell, path: "workstation-bootstrap.sh"
   end
 
 #  config.vm.define "anode" do |node|
