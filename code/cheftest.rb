@@ -29,14 +29,13 @@ puts "\n* Getting a single organization: "
 puts rest.get("/organizations/frabs")
 
 
-# Users list
-puts "\n* Listing users: "
-puts users = rest.get_rest("/users")
-
 # Get user details
 puts "\n* Getting user details: "
 puts rest.get("/users/admin")
 
+# Users list
+puts "\n* Listing users: "
+puts users = rest.get_rest("/users")
 
 # Create user
 if not users['mafraba']
@@ -56,22 +55,34 @@ if not users['mafraba']
   # user.admin(true)
   # user.password 'Saluda.123'
   # user.create
+
+  # Users list
+  puts "\n* Listing users: "
+  puts users = rest.get_rest("/users")
 end
 
-
 puts "\n* Listing users for organization: "
-puts rest.get('/organizations/acme/users')
+puts users = rest.get('/organizations/frabs/users')
+
+puts "\n* Adding user for organization: "
+puts rest.post('/organizations/frabs/users', username: "mafraba") rescue puts "bug in chef rest client ??"
+puts rest.post('/organizations/frabs/users', username: "admin") rescue puts "bug in chef rest client ??"
+
+puts "\n* Listing admins for organization: "
+puts adms = rest.get('/organizations/frabs/groups/admins')
 
 puts "\n* Adding admin for organization: "
-puts rest.post(
-  '/organizations/frabs/groups/admins/users', 
-  { 
-    username: "mafraba"
-  }
+adms['users'] << 'mafraba'
+adms['actors'] << 'mafraba'
+# puts adms
+# puts rest.post('/organizations/frabs/users', { username: 'mafraba'})
+puts rest.put(
+  '/organizations/frabs/groups/admins', 
+  { groupname: "admins", actors: {clients: adms['clients'], users: adms['users'], groups: adms['groups']}, orgname: "frabs" }
 )
 
 puts "\n* Listing admins for organization: "
-puts rest.get('/organizations/acme/groups/admins')
+puts rest.get('/organizations/frabs/groups/admins')
 
 ################### CLEAN UP ###########################
 
