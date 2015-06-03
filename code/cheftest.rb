@@ -8,8 +8,9 @@ require 'chef/rest'
 chef_server_url="https://aserver"
 client_name = "pivotal"
 signing_key_filename="/vagrant/pivotal.pem"
+key_content = File.read(signing_key_filename)
 
-rest = Chef::REST.new(chef_server_url, client_name, signing_key_filename)
+rest = Chef::REST.new(chef_server_url, client_name, nil, :raw_key => key_content)
 
 # Organizations list
 puts "\n* Listing organizations: "
@@ -18,10 +19,12 @@ puts orgs = rest.get_rest("/organizations")
 # Create organization
 if not orgs['frabs']
   puts "\n* Creating organization: "
-  puts rest.post(
+  puts resp = rest.post(
     '/organizations', 
     { name: "frabs", full_name: "Frabs, Org."}
   )
+  puts "Response type: #{resp.class}"
+  puts "Response keys: #{resp.keys}"
 end
 
 # Get organization
@@ -40,13 +43,13 @@ puts users = rest.get_rest("/users")
 # Create user
 if not users['mafraba']
   puts "\n* Creating user: "
-  puts rest.post(
+  puts mafraba = rest.post(
     '/users', 
     { 
       name: "mafraba",
       display_name: 'Manuel Franco',
       email: 'mafraba@gmail.com',
-      admin: true,
+      # admin: true,
       password: 'Saluda.123'
     }
   )
@@ -68,6 +71,10 @@ puts "\n* Adding user for organization: "
 puts rest.post('/organizations/frabs/users', username: "mafraba") rescue puts "bug in chef rest client ??"
 puts rest.post('/organizations/frabs/users', username: "admin") rescue puts "bug in chef rest client ??"
 
+puts "\n* Listing users for organization: "
+puts users = rest.get('/organizations/frabs/users')
+puts "Response type: #{users.class}"
+
 puts "\n* Listing admins for organization: "
 puts adms = rest.get('/organizations/frabs/groups/admins')
 
@@ -83,6 +90,20 @@ puts rest.put(
 
 puts "\n* Listing admins for organization: "
 puts rest.get('/organizations/frabs/groups/admins')
+
+
+puts "\n* Checking new admin permissions by creating client:"
+orest = Chef::REST.new(chef_server_url, 'mafraba', nil, :raw_key => mafraba['private_key'])
+puts orest.post(
+    '/organizations/frabs/clients', 
+    { 
+      name: "apicli",
+      admin: false
+    }
+  )
+
+puts "\n* Listing clients for organization: "
+puts orest.get('/organizations/frabs/clients')
 
 ################### CLEAN UP ###########################
 
