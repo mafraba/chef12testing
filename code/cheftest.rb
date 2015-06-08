@@ -31,6 +31,16 @@ end
 puts "\n* Getting a single organization: "
 puts rest.get("/organizations/frabs")
 
+puts "\n* Get a non-existing node: "
+begin
+  puts rest.get('/organizations/frabs/nodes/mynode') 
+rescue => ex
+  puts ex.class
+  puts ex.response.code
+  puts ex.response.code.class
+  puts ex.response.message
+  puts ex.to_s
+end
 
 # Get user details
 puts "\n* Getting user details: "
@@ -104,6 +114,7 @@ puts orest.post(
 
 puts "\n* Listing clients for organization: "
 puts orest.get('/organizations/frabs/clients')
+
 
 ################### CLEAN UP ###########################
 
