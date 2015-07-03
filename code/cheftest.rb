@@ -132,13 +132,19 @@ puts rest.get('/organizations/frabs/groups/admins')
 
 puts "\n* Creating node:"
 orest = Chef::REST.new(chef_server_url, 'mafraba', nil, :raw_key => mafraba['private_key'])
-puts api_cli = orest.post(
+puts orest.post(
     '/organizations/frabs/nodes', 
     # { 
     #   name: "apicli"
     # }
-    {"name"=>"5594039e2550d11f9100002a", "run_list"=>[]}
+    {"name"=>"5594039e2550d11f9100002a", "run_list"=>['role[myrole]']}
   )
+
+puts "\n* Getting node:"
+node = orest.get('/organizations/frabs/nodes/5594039e2550d11f9100002a').to_hash
+node12 = { name: node['name'], run_list: node['run_list'].map(&:to_s) }
+node12[:run_list] << node['role'] if node['role']
+puts node12
 
 rescue => ex
 
