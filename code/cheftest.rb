@@ -107,28 +107,33 @@ puts "\n* Listing admins for organization: "
 puts rest.get('/organizations/frabs/groups/admins')
 
 
-# puts "\n* Checking new admin permissions by creating client:"
-# orest = Chef::REST.new(chef_server_url, 'mafraba', nil, :raw_key => mafraba['private_key'])
-# puts api_cli = orest.post(
-#     '/organizations/frabs/clients', 
-#     { 
-#       name: "apicli",
-#       admin: true
-#     }
-#   )
+puts "\n* Checking new admin permissions by creating client:"
+orest = Chef::REST.new(chef_server_url, 'mafraba', nil, :raw_key => mafraba['private_key'])
+puts api_cli = orest.post(
+    '/organizations/frabs/clients', 
+    { 
+      name: "apicli",
+      admin: true
+    }
+  )
 
-# puts "\n* Listing clients for organization: "
-# puts orest.get('/organizations/frabs/clients')
+puts "\n* Listing clients for organization: "
+puts orest.get('/organizations/frabs/clients')
 
-# puts "\n* Testing #{org['clientname']} permission to create another client: "
-# orest = Chef::REST.new(chef_server_url, org['clientname'], nil, :raw_key => org['private_key'])
-# puts second_cli = orest.post(
-#     '/organizations/frabs/clients', 
-#     { 
-#       name: "secondcli",
-#       admin: false
-#     }
-#   )
+puts "\n* Testing #{org['clientname']} permission to create another client: "
+orest = Chef::REST.new(chef_server_url, org['clientname'], nil, :raw_key => org['private_key'])
+puts second_cli = orest.post(
+    '/organizations/frabs/clients', 
+    { 
+      name: "secondcli",
+      admin: false
+    }
+  )
+
+puts "\n* Getting client: "
+c2 = rest.get('/organizations/frabs/clients/secondcli')
+puts c2.class.to_s + " " + c2.to_hash.to_s
+
 
 puts "\n* Creating node:"
 orest = Chef::REST.new(chef_server_url, 'mafraba', nil, :raw_key => mafraba['private_key'])
@@ -145,6 +150,28 @@ node = orest.get('/organizations/frabs/nodes/5594039e2550d11f9100002a').to_hash
 node12 = { name: node['name'], run_list: node['run_list'].map(&:to_s) }
 node12[:run_list] << node['role'] if node['role']
 puts node12
+
+
+puts "\n* Creating role:"
+
+puts orest.post(
+  '/organizations/frabs/roles', 
+  {"name"=>"myrole", "description"=>"myrole" }
+)
+
+puts "\n* Getting role:"
+puts r = orest.get('/organizations/frabs/roles/myrole')
+puts r.class.to_s + " " + r.to_hash.to_s
+
+puts "\n* Updating role:"
+puts r = orest.put(
+  '/organizations/frabs/roles/myrole', 
+  {"name"=>"myrole", "description"=>"myrole2" }
+)
+puts r.class.to_s + " " + r.to_hash.to_s
+
+
+
 
 rescue => ex
 
