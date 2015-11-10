@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-apt-get update
-apt-get upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 sudo locale-gen es_ES.UTF-8
 
 # Ensure that the Server is Accessible by Hostname
