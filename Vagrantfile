@@ -10,7 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     server.vm.box = "trusty64"
     server.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
     server.vm.hostname = "aserver"
-    server.vm.network "public_network"
+    # server.vm.network "public_network"
     server.vm.network "private_network", ip: "192.168.33.11"
     server.vm.provision :shell, path: "server-bootstrap.sh"
     server.vm.provider :virtualbox do |vb|
@@ -19,13 +19,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define "aworks" do |ws|
-    ws.vm.box = "trusty64"
-    ws.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
-    ws.vm.hostname = "aworks"
-    ws.vm.network "private_network", ip: "192.168.33.12"
-    ws.vm.provision :shell, path: "workstation-bootstrap.sh"
-  end
+  # config.vm.define "aworks" do |ws|
+  #   ws.vm.box = "trusty64"
+  #   ws.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
+  #   ws.vm.hostname = "aworks"
+  #   ws.vm.network "private_network", ip: "192.168.33.12"
+  #   ws.vm.provision :shell, path: "workstation-bootstrap.sh"
+  # end
 
 #  config.vm.define "anode" do |node|
 #    node.vm.box = "trusty64"
